@@ -2,32 +2,20 @@
 
 Repo for the HTTP infra lab 2021
 
-
-
 ## Step 1 - Static HTTP server with apache httpd
 
-- You have a GitHub repo with everything needed to build the Docker image. 
-  - https://github.com/gab-thr/RES-HTTP-infra 
-- You can do a demo, where you build the image, run a container and access content from a browser. 
+Here is the GitHub repository we use for this labo https://github.com/gab-thr/RES-HTTP-infra 
 
-```bash
-$ docker build -t res/apache-php . # build docker image
-$ docker run -p 9090:80 res/apache-php # start apache server
-$ docker exec -it container_name bash # start bash session on server
-```
+In the first part, we have built a static website served using apache which runs in a docker container. For the static website, we used the Grayscale bootstrap starter (found here https://startbootstrap.com/theme/grayscale)
 
-- You have used a nice looking web template, different from the one shown in the webcast.
-  - using this bootstrap template called Grayscale (https://startbootstrap.com/theme/grayscale)
+#### configuration of apache server
 
-- You are able to explain what you do in the Dockerfile.
+We are using the official php image which contains apache, php:7.2-apache (https://hub.docker.com/_/php/)
 
-- You are able to show where the apache config files are located (in a running container).
+## Step 2: Dynamic HTTP server with express.js
 
-- You have documented your configuration in your report.
+For this step, we created a lorem ipsum generator using node, chance and express. We are using `Chance` to generate random words, sentences and paragraphs and `Express` for listening and answering to http requests. Like the first step, this application also runs within a docker container.
 
+#### configuration of node image
 
-
-### configuration of apache server
-
-We are using the official php, php:7.2-apache (https://hub.docker.com/_/php/)
-
+We are using the following version of `node js` for our docker image. node:14.17.
