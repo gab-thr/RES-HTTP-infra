@@ -3,8 +3,10 @@ set -e
 
 # Add setup for RES labo
 echo "Setup for the RES labo..."
-echo "Static app URL: $STATIC_APP"
-echo "Dynamic app URL: $DYNAMIC_APP"
+echo "Static app 0 URL: $STATIC_APP_0"
+echo "Static app 1 URL: $STATIC_APP_1"
+echo "Dynamic app 0 URL: $DYNAMIC_APP_0"
+echo "Dynamic app 1 URL: $DYNAMIC_APP_1"
 
 : "${APACHE_CONFDIR:=/etc/apache2}"
 : "${APACHE_ENVVARS:=$APACHE_CONFDIR/envvars}"
@@ -17,6 +19,6 @@ fi
 : "${APACHE_PID_FILE:=$APACHE_RUN_DIR/apache2.pid}"
 rm -f "$APACHE_PID_FILE"
 
-php /var/apache2/templates/config-template.php > /etc/apache2/sites-available/001-reverse-proxy.conf
+php /var/apache2/templates/config-template.php >/etc/apache2/sites-available/001-reverse-proxy.conf
 
 exec apache2 -DFOREGROUND

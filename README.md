@@ -74,3 +74,62 @@ We use the same config as for the original static website from step 1.
 ## Step 5: Dynamic reverse proxy configuration
 
 We followed the webcast for this step. We use PHP to build a config file for our apache server  reading from environment variables to get the services' ip addresses at run time. We wrote these two files like recommended in the webcast `config-template.php` and `apache2-foreground`.
+
+## Bonus steps
+
+### Load balancing: multiple server nodes
+
+This was achieved using `mod_proxy_balancer`  and `mod_lbmethod_byrequests`, which allow the specification of a load balance protocol, and "members" of this balance cluster as below:
+
+```xml
+<Proxy "balancer://dynamic_app">
+    BalancerMember 'http://<?php print "$DYNAMIC_APP_0" ?>'
+    BalancerMember 'http://<?php print "$DYNAMIC_APP_1" ?>'
+</Proxy>
+
+ProxyPass '/api/lorem/' 'balancer://dynamic_app/'
+ProxyPassReverse '/api/lorem/' 'balancer://dynamic_app/'
+```
+
+This way, requests are automatically sent to one of the backend servers, chosen by our reverse proxy.
+
+### Load balancing: round-robin vs sticky sessions
+
+Using `mod_headers`, it is possible to add headers on responses from our reverse proxy. We can thus enable sticky sessions (as outlined here: https://httpd.apache.org/docs/2.4/en/mod/mod_proxy_balancer.html , c.f. "Examples of a balancer configuration") so that requests to the static servers are "sticky", i.e. that a user's session always connects to the same instance of the static server.
+
+We can do this with the following:
+
+```xml
+Header add Set-Cookie 'ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/' env=BALANCER_ROUTE_CHANGED
+
+# balance config for static site
+<Proxy "balancer://static_app">
+	BalancerMember 'http://<?php print "$STATIC_APP_0" ?>' route=1
+	BalancerMember 'http://<?php print "$STATIC_APP_1" ?>' route=2
+	ProxySet stickysession=ROUTEID
+</Proxy>
+
+ProxyPass '/' 'balancer://static_app/'
+ProxyPassReverse '/' 'balancer://static_app/'
+```
+
+### Dynamic cluster management
+
+We did not have time to build this feature, though we did find a suitable-looking module to achieve this: mod_cluster, found here: https://docs.modcluster.io/ . This is able to perform automatic service discovery and dynamic management of services.
+
+### Management UI
+
+For a minimal management UI, we made use of the balancer manager built into apache, with `mod_status`. This is very basic, it allows us to manage balance factors between instances, and allows us to take down instances too. We did not add the capability to bring down docker containers or manage them directly.
+
+This is enabled like so:
+
+```
+# config for load balance manager
+<Location '/balancer-manager'>
+	SetHandler balancer-manager
+</Location>
+
+ProxyPass '/balancer-manager' !
+```
+
+We have to include the extra `ProxyPass` in order that `/balancer-manager` be exempt from proxying.
