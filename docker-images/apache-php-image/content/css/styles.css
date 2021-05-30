@@ -11251,3 +11251,17 @@ body {
 .footer {
   padding: 5rem 0;
 }
+
+.dynamic-content {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px auto;
+  max-width: 500px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.random-word {
+  margin: 0 5px;
+}

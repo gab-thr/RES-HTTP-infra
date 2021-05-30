@@ -63,7 +63,9 @@ RUN a2ensite 000-* 001-*
 
 ## Step 4: AJAX requests with JQuery
 
+For this step, we have written the AJAX code and use of JQuery in our source files, rather than in the running container from the webcast. We first load JQuery in the `head` of `index.html`, then in `content/js/scripts.js`, we define a function `loadDynamicContent`, which is responsible for loading some data from our Express service, and placing it in the DOM. We use `getJSON`, `each` and the selector functionality of JQuery to achieve this. We then call this repeatedly using `setInterval`.
 
+We use the same config as for the original static website from step 1.
 
 ## Step 5: Dynamic reverse proxy configuration
 
