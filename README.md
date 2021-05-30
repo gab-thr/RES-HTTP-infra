@@ -2,6 +2,10 @@
 
 Repo for the HTTP infra lab 2021
 
+Authors: Melvin Merk & Gabrielle Thurnherr
+
+Date: 30.05.2021
+
 ## Step 1 - Static HTTP server with apache httpd
 
 Here is the GitHub repository we use for this labo https://github.com/gab-thr/RES-HTTP-infra 
@@ -69,3 +73,4 @@ We use the same config as for the original static website from step 1.
 
 ## Step 5: Dynamic reverse proxy configuration
 
+We followed the webcast for this step. We use PHP to build a config file for our apache server  reading from environment variables to get the services' ip addresses at run time. We wrote these two files like recommended in the webcast `config-template.php` and `apache2-foreground`.
