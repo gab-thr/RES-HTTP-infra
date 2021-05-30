@@ -22,12 +22,6 @@ We are using the following version of `node js` for our docker image. node:14.17
 
 ## Step 3: Reverse proxy with apache (static configuration)
 
-- You have a GitHub repo with everything needed to build the Docker image for the container.
-- You can do a demo, where you start from an "empty" Docker environment (no container running) and where you start 3 containers: static server, dynamic server and reverse proxy; in the demo, you prove that the routing is done correctly by the reverse proxy.
-- You can explain and prove that the static and dynamic servers cannot be reached directly (reverse proxy is a single entry point in the infra).
-- You are able to explain why the static configuration is fragile and needs to be improved.
-- You have **documented** your configuration in your report.
-
 Since we run the program on windows, we had to modify this file located at `c:\Windows\System32\Drivers\etc\hosts`, we set 127.0.0.1 to demo.res.ch. We can access our static website at this address http://demo.res.ch:8080/ and our lorem ipsum generator at this one http://demo.res.ch:8080/api/lorem/
 
 #### configuration of reverse proxy server
