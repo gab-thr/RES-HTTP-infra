@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+
+# Add setup for RES labo
+echo "Setup for the RES labo..."
+echo "Static app 0 URL: $STATIC_APP_0"
+echo "Static app 1 URL: $STATIC_APP_1"
+echo "Dynamic app 0 URL: $DYNAMIC_APP_0"
+echo "Dynamic app 1 URL: $DYNAMIC_APP_1"
+
+: "${APACHE_CONFDIR:=/etc/apache2}"
+: "${APACHE_ENVVARS:=$APACHE_CONFDIR/envvars}"
+if test -f "$APACHE_ENVVARS"; then
+    . "$APACHE_ENVVARS"
+fi
+
+# Apache gets grumpy about PID files pre-existing
+: "${APACHE_RUN_DIR:=/var/run/apache2}"
+: "${APACHE_PID_FILE:=$APACHE_RUN_DIR/apache2.pid}"
+rm -f "$APACHE_PID_FILE"
+
+php /var/apache2/templates/config-template.php >/etc/apache2/sites-available/001-reverse-proxy.conf
+
+exec apache2 -DFOREGROUND
